@@ -7,4 +7,5 @@ export const useExampleQuery = () =>
     queryKey: ["example"],
     queryFn: exampleService.getExample,
     onError: errorHandler,
+    refetchInterval: 3000,
   });
