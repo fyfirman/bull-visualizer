@@ -11,6 +11,8 @@ export interface Job {
   returnvalue: any;
   finishedOn: number;
   processedOn: number;
+  status: string;
+  failedReason?: string;
 }
 
 export interface Data {

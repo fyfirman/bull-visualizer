@@ -32,7 +32,7 @@ function Home() {
     queryKey: ["example"],
     queryFn: exampleService.getExample,
     onError: errorHandler,
-    refetchInterval: 3000,
+    refetchInterval: 500,
   });
 
   const dataKeys = useMemo(() => {

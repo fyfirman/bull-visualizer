@@ -59,6 +59,13 @@ const JobCard: React.FC<JobCardProps> = ({ data, showKeys }) => {
               </span>
             </div>
           ))}
+
+          {data.failedReason ? (
+            <div className="text-xs">
+              <span className="font-bold text-sm">Error</span>
+              <p className="text-muted-foreground">{data.stacktrace}</p>
+            </div>
+          ) : null}
         </CardContent>
         <CardFooter className="flex justify-between">
           <span className="text-sm text-muted-foreground">
