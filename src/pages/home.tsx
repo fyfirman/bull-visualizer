@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import exampleService from "~/services/example-service";
 import errorHandler from "~/helpers/error-handler";
 import { LayoutGroup, motion } from "framer-motion";
+import { Label } from "~/components/ui/label";
 
 const getDataKeys = (object: object) => {
   const keys: string[] = [];
@@ -27,6 +28,7 @@ const getDataKeys = (object: object) => {
 
 function Home() {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [hideDetail, setHideDetail] = useState<boolean>(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["example"],
@@ -52,57 +54,72 @@ function Home() {
       <div className="flex flex-col">
         <div className="flex items-center justify-between space-y-2 mb-8">
           <h1 className="text-3xl font-bold tracking-tight">Bull Visualizer</h1>
-          <Popover>
-            <PopoverTrigger>
-              <Button>
-                <span>Show keys</span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="flex flex-col gap-2 text-sm">
-                {dataKeys.map((dataKey) => (
-                  <div key={dataKey} className="flex justify-between ">
-                    <span>{dataKey}</span>
-                    <Switch
-                      checked={selectedKeys.includes(dataKey)}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setSelectedKeys((prev) => [...prev, dataKey]);
-                        } else {
-                          setSelectedKeys((prev) =>
-                            prev.filter((v) => v !== dataKey)
-                          );
-                        }
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
+          <div className="flex space-x-8">
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={hideDetail}
+                id="hide-details"
+                onCheckedChange={setHideDetail}
+              />
+              <Label htmlFor="hide-details">Hide Details</Label>
+            </div>
+            <Popover>
+              <PopoverTrigger>
+                <Button>
+                  <span>Show keys</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="flex flex-col gap-2 text-sm">
+                  {dataKeys.map((dataKey) => (
+                    <div key={dataKey} className="flex justify-between ">
+                      <span>{dataKey}</span>
+                      <Switch
+                        checked={selectedKeys.includes(dataKey)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedKeys((prev) => [...prev, dataKey]);
+                          } else {
+                            setSelectedKeys((prev) =>
+                              prev.filter((v) => v !== dataKey)
+                            );
+                          }
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
       </div>
 
       <LayoutGroup>
-        <motion.div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6" layout>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           {Object.keys(data.data).map((status) => (
             <div key={status} className="flex flex-col gap-4">
               <h3 className="px-4 font-medium text-muted-foreground">
-                {status}
+                {status} ({data.data[status].length})
               </h3>
-              <div className="flex flex-col gap-4">
+              <motion.div className="flex flex-col gap-4" layout>
                 {data.data[status].map((job) => (
                   <motion.div
                     key={job.id}
                     layoutId={`job-card-board-${job.id}`}
                   >
-                    <JobCard data={job} showKeys={selectedKeys} />
+                    <JobCard
+                      data={job}
+                      showDetail={!hideDetail}
+                      showKeys={selectedKeys}
+                      status={status}
+                    />
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </LayoutGroup>
       <p className="read-the-docs">Click on the the logos to learn more</p>
     </div>
