@@ -3,14 +3,14 @@ export interface Job {
   name: string;
   data: Data;
   opts: Opts;
-  progress: number;
+  progress: number | object;
   delay: number;
   timestamp: number;
   attemptsMade: number;
   stacktrace: any[];
   returnvalue: any;
   finishedOn: number;
-  processedOn: number;
+  processedOn?: number;
   status: string;
   failedReason?: string;
 }
