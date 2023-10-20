@@ -66,12 +66,12 @@ const JobCard: React.FC<JobCardProps> = ({
           <div>
             {Number.isNaN(parseInt(data.progress, 10)) ? (
               <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col space-y-1">
-                <Progress value={data.progress.totalData / 100} />
+                <Progress value={(data.progress.iteration * 100) / 10} />
                 <span className="font-normal leading-snug text-muted-foreground">
                   Iteration : {data.progress.iteration}
                 </span>
                 <span className="font-normal leading-snug text-muted-foreground">
-                  Total data : {data.progress.totalData}
+                  {/* Total data : {data.progress.totalData} */}
                 </span>
               </div>
             ) : null}
